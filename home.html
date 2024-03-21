@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <form id="noteForm" action="/add_note" method="post">
+        <input type="text" id="noteInput" name="note" placeholder="Enter a note">
+        <button type="submit">Add Note</button>
+    </form>
+
+    <ul id="notesList">
+    {% for note in notes %}
+        <li>{{ note }}</li>
+    {% endfor %}
+    </ul>
+
+    <script>
+        $(document).ready(function() {
+            $('#noteForm').submit(function(event) {
+                event.preventDefault(); // Prevent the form from submitting traditionally
+                var note = $('#noteInput').val(); // Get the value of the note input field
+                $.ajax({
+                    type: 'POST',
+                    url: '/add_note',
+                    data: { note: note }, // Send the note to the server
+                    success: function(data) {
+                        $('#notesList').append('<li>' + note + '</li>'); // Add the note to the list
+                        $('#noteInput').val(''); // Clear the input field
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
